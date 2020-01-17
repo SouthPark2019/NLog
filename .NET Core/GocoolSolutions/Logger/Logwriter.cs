@@ -20,7 +20,7 @@ namespace GocoolSolutions.MyLoggers
         /// <param name="msg">日志内容</param>
         /// <param name="logger">读写器名</param>
         /// <param name="logLevel">错误等级</param>
-        public static void WriteLog(string msg, string logger = "default", LogLevel logLevel = LogLevel.Info)
+        public static void WriteLog(string msg, string logger, LogLevel logLevel = LogLevel.Info)
         {
             if (!existingLoggers.ContainsKey(logger))
             {

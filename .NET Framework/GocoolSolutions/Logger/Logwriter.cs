@@ -6,12 +6,12 @@ using NLog;
 /// 我们从字典获取logger，而不是每次写日志的时候都new出一个logger
 /// 提高日志写入的效率
 /// </summary>
-namespace GocoolSolutions.MyLoggers
+namespace Gocool
 {
     public static class Logwriter
     {
         //读写器名字--读写器
-        private static Dictionary<string, Logger> existingLoggers = new Dictionary<string, Logger>();
+        private static Dictionary<string, Logger> _existingLoggers = new Dictionary<string, Logger>();
         //用于锁字典
         private static object locker = new object();
         /// <summary>
@@ -22,35 +22,35 @@ namespace GocoolSolutions.MyLoggers
         /// <param name="logLevel">错误等级</param>
         public static void WriteLog(string msg, string logger = "default", LogLevel logLevel = LogLevel.Info)
         {
-            if (!existingLoggers.ContainsKey(logger))
+            if (!_existingLoggers.ContainsKey(logger))
             {
                 lock (locker)
                 {
-                    if (!existingLoggers.ContainsKey(logger))
+                    if (!_existingLoggers.ContainsKey(logger))
                     {
-                        existingLoggers[logger] = LogManager.GetLogger(logger);
+                        _existingLoggers[logger] = LogManager.GetLogger(logger);
                     }
                 }
             }
             switch (logLevel)
             {
                 case LogLevel.Trace:
-                    existingLoggers[logger].Trace(msg);
+                    _existingLoggers[logger].Trace(msg);
                     break;
                 case LogLevel.Debug:
-                    existingLoggers[logger].Debug(msg);
+                    _existingLoggers[logger].Debug(msg);
                     break;
                 case LogLevel.Info:
-                    existingLoggers[logger].Info(msg);
+                    _existingLoggers[logger].Info(msg);
                     break;
                 case LogLevel.Warn:
-                    existingLoggers[logger].Warn(msg);
+                    _existingLoggers[logger].Warn(msg);
                     break;
                 case LogLevel.Error:
-                    existingLoggers[logger].Error(msg);
+                    _existingLoggers[logger].Error(msg);
                     break;
                 case LogLevel.Fatal:
-                    existingLoggers[logger].Fatal(msg);
+                    _existingLoggers[logger].Fatal(msg);
                     break;
             }
         }
